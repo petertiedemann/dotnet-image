@@ -4,12 +4,14 @@ RUN echo "deb http://download.mono-project.com/repo/debian wheezy main" | tee /e
 RUN echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list
 RUN echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list
 RUN apt-get update
-RUN apt-get install curl libunwind8 gettext mono-complete -y
+RUN apt-get install curl libunwind8 gettext mono-complete dos2unix -y
 RUN curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=827530
 RUN mkdir -p /opt/dotnet && tar zxf dotnet.tar.gz -C /opt/dotnet
 RUN ln -s /opt/dotnet/dotnet /usr/local/bin
 # Move to bin to so that cake ends up in /bin/tools
-RUN cd /bin/
-ADD ./cake-install.sh /
-RUN chmod +rwx ./cake-install.sh
-RUN ./cake-install.sh
+ADD ./cakeinstall.sh /bin/cakeinstall.sh
+RUN cd bin
+# Ensure line endings dont mess things up
+RUN dos2unix -q /bin/cakeinstall.sh
+RUN chmod +rwx /bin/cakeinstall.sh
+RUN /bin/cakeinstall.sh
