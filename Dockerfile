@@ -14,4 +14,3 @@ RUN cd bin
 RUN dos2unix -q /bin/cakeinstall.sh
 RUN chmod +rwx /bin/cakeinstall.sh
 RUN /bin/cakeinstall.sh
-RUN xbuild --version
